@@ -68,3 +68,10 @@ def test_empty_key_raises_error(tmp_env):
     path = tmp_env("=value\n")
     with pytest.raises(EnvParseError, match="Empty key at line 1"):
         parse_env_file(path)
+
+
+def test_invalid_syntax_reports_correct_line_number(tmp_env):
+    """Ensure the error message references the correct line for multi-line files."""
+    path = tmp_env("VALID=ok\n# comment\nBAD_LINE\n")
+    with pytest.raises(EnvParseError, match="Invalid syntax at line 3"):
+        parse_env_file(path)
