@@ -48,6 +48,18 @@ envguard check --envs .env.staging .env.production --strict
 
 ---
 
+## Exit Codes
+
+| Code | Meaning |
+|------|---------|
+| `0`  | All checks passed |
+| `1`  | One or more keys are missing or mismatched |
+| `2`  | Invalid arguments or file not found |
+
+This makes `envguard` easy to integrate into CI pipelines — a non-zero exit code will fail the pipeline automatically.
+
+---
+
 ## Features
 
 - Detects missing or undefined keys before deployment
