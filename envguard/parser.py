@@ -58,6 +58,11 @@ def parse_env_file(filepath: str | Path) -> Dict[str, Optional[str]]:
                         f"Empty key at line {lineno}: '{line}'"
                     )
 
+                if " " in key or "\t" in key:
+                    raise EnvParseError(
+                        f"Key contains whitespace at line {lineno}: '{key}'"
+                    )
+
                 value = value.strip()
 
                 # Strip surrounding quotes
