@@ -34,6 +34,14 @@ class ClassifyResult:
             lines.append(f"uncategorized: {len(self.uncategorized)} key(s)")
         return "\n".join(lines) if lines else "No keys classified."
 
+    def all_keys(self) -> List[str]:
+        """Return all classified and uncategorized keys as a flat sorted list."""
+        keys: List[str] = []
+        for key_list in self.categories.values():
+            keys.extend(key_list)
+        keys.extend(self.uncategorized)
+        return sorted(keys)
+
 
 def _detect_category(key: str) -> str | None:
     upper = key.upper()
