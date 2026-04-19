@@ -11,6 +11,9 @@ def cmd_rename(args: argparse.Namespace) -> int:
     except EnvParseError as exc:
         print(f"Error parsing file: {exc}", file=sys.stderr)
         return 1
+    except OSError as exc:
+        print(f"Error reading file: {exc}", file=sys.stderr)
+        return 1
 
     if not args.rename:
         print("No renames specified. Use --rename OLD NEW.", file=sys.stderr)
@@ -35,9 +38,13 @@ def cmd_rename(args: argparse.Namespace) -> int:
         return 0
 
     output_path = args.output or args.file
-    with open(output_path, "w") as fh:
-        for key, value in result.renamed.items():
-            fh.write(f"{key}={value}\n")
+    try:
+        with open(output_path, "w") as fh:
+            for key, value in result.renamed.items():
+                fh.write(f"{key}={value}\n")
+    except OSError as exc:
+        print(f"Error writing file: {exc}", file=sys.stderr)
+        return 1
 
     print(result.summary())
     if result.skipped:
