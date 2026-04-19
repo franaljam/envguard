@@ -76,3 +76,11 @@ def test_summary_no_changes():
     env = {"KEY": "value"}
     result = normalize_env(env, normalize_bools=False, strip_inline_comments=False)
     assert result.summary() == "No normalization changes."
+
+
+def test_empty_env_returns_empty():
+    """Normalizing an empty dict should return an empty normalized dict with no changes."""
+    result = normalize_env({})
+    assert result.normalized == {}
+    assert not result.changed()
+    assert result.changed_keys == set()
