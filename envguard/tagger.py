@@ -19,6 +19,10 @@ class TagResult:
             lines.append(f"{key}: {', '.join(sorted(t))}")
         return "\n".join(lines) if lines else "No tags assigned."
 
+    def all_tags(self) -> Set[str]:
+        """Return the set of all unique tags assigned across all keys."""
+        return {tag for t in self.tags.values() for tag in t}
+
 
 def tag_env(
     env: Dict[str, str],
