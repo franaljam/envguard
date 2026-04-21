@@ -9,6 +9,13 @@ class EnvParseError(Exception):
     pass
 
 
+def _strip_quotes(value: str) -> str:
+    """Strip matching surrounding quotes from a value string."""
+    if len(value) >= 2 and value[0] == value[-1] and value[0] in ('"', "'"):
+        return value[1:-1]
+    return value
+
+
 def parse_env_file(filepath: str | Path) -> Dict[str, Optional[str]]:
     """
     Parse a .env file and return a dictionary of key-value pairs.
@@ -63,11 +70,7 @@ def parse_env_file(filepath: str | Path) -> Dict[str, Optional[str]]:
                         f"Key contains whitespace at line {lineno}: '{key}'"
                     )
 
-                value = value.strip()
-
-                # Strip surrounding quotes
-                if len(value) >= 2 and value[0] == value[-1] and value[0] in ('"', "'"):
-                    value = value[1:-1]
+                value = _strip_quotes(value.strip())
 
                 env_vars[key] = value if value else None
 
