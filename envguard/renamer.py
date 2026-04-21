@@ -36,7 +36,21 @@ def rename_env(
 
     Returns:
         RenameResult with the updated dict and metadata.
+
+    Raises:
+        ValueError: If any new key in renames conflicts with an existing key
+            in env that is not itself being renamed.
     """
+    # Check for conflicts: a new_key that already exists in env and is not
+    # itself one of the old keys being renamed away.
+    old_keys = set(renames.keys())
+    for old_key, new_key in renames.items():
+        if new_key in env and new_key not in old_keys:
+            raise ValueError(
+                f"Rename target '{new_key}' already exists in env and is not "
+                f"being renamed itself (conflict from '{old_key}')."
+            )
+
     result: Dict[str, str] = {}
     applied: List[tuple] = []
     skipped: List[str] = []
