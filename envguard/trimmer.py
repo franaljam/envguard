@@ -35,9 +35,16 @@ def trim_env(
         keys: explicit list of key names to remove.
         pattern: regex pattern; matching key names are removed.
         drop_empty: if True, also remove keys whose value is an empty string.
+
+    Raises:
+        re.error: if *pattern* is not a valid regular expression.
     """
     keys_set = set(keys or [])
-    compiled = re.compile(pattern) if pattern else None
+
+    try:
+        compiled = re.compile(pattern) if pattern else None
+    except re.error as exc:
+        raise re.error(f"Invalid pattern {pattern!r}: {exc}") from exc
 
     removed: List[str] = []
     result: Dict[str, str] = {}
