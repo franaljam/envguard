@@ -72,3 +72,17 @@ def test_summary_with_changes():
     s = result.summary()
     assert "Padded" in s
     assert str(len(REF)) in s
+
+
+def test_padded_keys_are_subset_of_ref():
+    """All keys recorded in padded must come from the reference dict."""
+    env = {"HOST": "prod.db"}
+    result = pad_env(env, REF)
+    assert set(result.padded.keys()).issubset(set(REF.keys()))
+
+
+def test_padded_does_not_include_existing_keys():
+    """Keys already present in env should not appear in padded, even when overwrite=False."""
+    env = {"HOST": "prod.db"}
+    result = pad_env(env, REF, overwrite=False)
+    assert "HOST" not in result.padded
