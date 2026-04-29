@@ -80,3 +80,9 @@ def test_original_not_mutated():
 def test_no_match_returns_empty_list():
     result = highlight_env(_ENV, prefixes=["NONEXISTENT_"])
     assert result.highlighted == []
+
+
+def test_duplicate_criteria_no_duplicate_highlighted():
+    """Keys matched by multiple criteria should appear only once in highlighted."""
+    result = highlight_env(_ENV, prefixes=["DB_"], exact=["DB_HOST"])
+    assert result.highlighted.count("DB_HOST") == 1
